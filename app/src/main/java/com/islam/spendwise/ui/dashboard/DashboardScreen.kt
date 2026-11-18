@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Settings
@@ -24,8 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.islam.spendwise.R
 import com.islam.spendwise.data.local.SpendWiseDatabaseProvider
 import com.islam.spendwise.ui.common.TransactionRow
 import com.islam.spendwise.ui.common.currentMonthRange
@@ -34,7 +38,7 @@ import com.islam.spendwise.ui.common.formatEgp
 import com.islam.spendwise.ui.onboarding.PermissionRationaleBanner
 
 @Composable
-fun DashboardScreen(onOpenRules: () -> Unit) {
+fun DashboardScreen(onOpenSettings: () -> Unit) {
     val db = SpendWiseDatabaseProvider.database
     val transactions = db.transactionDao().observeAll().collectAsState(initial = emptyList()).value
     val categories = db.categoryDao().observeAll().collectAsState(initial = emptyList()).value
@@ -52,61 +56,75 @@ fun DashboardScreen(onOpenRules: () -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "SpendWise",
+                        text = stringResource(R.string.app_name),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Local-first expense tracker · EGP",
+                        text = stringResource(R.string.dashboard_tagline),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                IconButton(onClick = onOpenRules) {
-                    Icon(Icons.Filled.Settings, contentDescription = "Category rules")
+                IconButton(onClick = onOpenSettings) {
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = stringResource(R.string.open_settings),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
 
-        item {
-            PermissionRationaleBanner()
-        }
+        item { PermissionRationaleBanner() }
 
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
-                        text = "Spent this month",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        text = stringResource(R.string.spent_this_month).uppercase(java.util.Locale.ROOT),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        letterSpacing = androidx.compose.ui.unit.TextUnit(1.2f, androidx.compose.ui.unit.TextUnitType.Sp),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f)
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = formatEgp(monthTotal),
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Received: ${formatEgp(creditTotal)} · ${monthTx.size} transactions",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        text = stringResource(
+                            R.string.received_transactions,
+                            formatEgp(creditTotal),
+                            monthTx.size
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f)
                     )
                 }
             }
@@ -122,7 +140,7 @@ fun DashboardScreen(onOpenRules: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.size(6.dp))
                 Text(
-                    text = "Auto-captured & manual, all in one place",
+                    text = stringResource(R.string.auto_captured),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -131,26 +149,29 @@ fun DashboardScreen(onOpenRules: () -> Unit) {
 
         item {
             Text(
-                text = "Recent transactions",
+                text = stringResource(R.string.recent_transactions),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.Bold
             )
         }
 
         if (transactions.isEmpty()) {
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    )
+                ) {
                     Column(
-                        modifier = Modifier.padding(20.dp),
+                        modifier = Modifier.padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "No transactions yet",
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                        Text(stringResource(R.string.empty_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Bank SMS and InstaPay notifications will appear here automatically once you grant SMS and Notification Access permissions. Or use the Add tab to create one manually.",
+                            text = stringResource(R.string.empty_body),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -158,8 +179,9 @@ fun DashboardScreen(onOpenRules: () -> Unit) {
                 }
             }
         } else {
-            items(transactions.take(12)) { tx ->
-                val categoryName = tx.categoryId?.let { categoryById[it]?.nameEn } ?: "Uncategorized"
+            items(transactions.take(12), key = { it.id }) { tx ->
+                val categoryName = tx.categoryId?.let { categoryById[it]?.nameEn }
+                    ?: stringResource(R.string.uncategorized)
                 TransactionRow(
                     merchant = tx.merchant.orEmpty(),
                     categoryLabel = categoryName,

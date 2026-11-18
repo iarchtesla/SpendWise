@@ -1,12 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SpendWise</string>
-    <string name="dashboard">Dashboard</string>
-    <string name="add_expense">Add Expense</string>
-    <string name="reports">Reports</string>
-    <string name="settings">Settings</string>
-    <string name="manual_entry">Manual Entry</string>
-    <string name="merchant">Merchant</string>
-    <string name="amount">Amount</string>
-    <string name="category">Category</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_list">List</string>
+    <string name="nav_add">Add</string>
+    <string name="nav_reports">Reports</string>
+    <string name="nav_budgets">Budgets</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_tagline">Local-first expense tracker · EGP</string>
+    <string name="spent_this_month">Spent this month</string>
+    <string name="received_transactions">Received: %1$s · %2$d transactions</string>
+    <string name="auto_captured">Auto-captured &amp; manual, all in one place</string>
+    <string name="recent_transactions">Recent transactions</string>
+    <string name="empty_title">No transactions yet</string>
+    <string name="empty_body">Bank SMS and InstaPay notifications will appear here automatically once you grant SMS and Notification Access permissions. Or use the Add tab to create one manually.</string>
+
+    <!-- Permission rationale banner -->
+    <string name="banner_title">Auto-capture is off</string>
+    <string name="banner_body">SpendWise reads bank SMS and InstaPay notifications to record expenses automatically. Everything stays on your device — nothing is uploaded.</string>
+    <string name="banner_grant_sms">Grant SMS permission</string>
+    <string name="banner_enable_notif">Enable Notification Access in Settings</string>
+    <string name="banner_dismiss">Dismiss</string>
+
+    <!-- Transaction list -->
+    <string name="list_title">All transactions</string>
+    <string name="list_subtitle">Tap any item to re-categorize or delete it.</string>
+    <string name="search">Search</string>
+    <string name="search_placeholder">Merchant, sender, amount…</string>
+    <string name="no_match">No transactions match \u201C%1$s\u201D.</string>
+    <string name="empty_none">No transactions yet.</string>
+    <string name="uncategorized">Uncategorized</string>
+    <string name="choose_category">Choose the correct category:</string>
+    <string name="done">Done</string>
+    <string name="delete">Delete</string>
+    <string name="transaction_title">Transaction</string>
+    <string name="unknown_merchant">Unknown merchant</string>
+
+    <!-- Manual entry -->
+    <string name="add_expense">Add expense</string>
+    <string name="amounts_note">All amounts are in Egyptian pounds (EGP / ج.م)</string>
+    <string name="amount_label">Amount (EGP)</string>
+    <string name="amount_placeholder">e.g. 250.00</string>
+    <string name="merchant_placeholder">e.g. Carrefour, Uber, Vodafone bill…</string>
+    <string name="expense">Expense</string>
+    <string name="income">Income</string>
+    <string name="error_amount">Please enter a valid positive amount.</string>
+    <string name="error_save">Could not save the transaction. Please try again.</string>
+    <string name="save_transaction">Save transaction</string>
+    <string name="saved_toast">Saved — month %1$s</string>
+    <string name="merchant_label">Merchant / description</string>
+    <string name="category_label">Category</string>
+
+    <!-- Reports -->
+    <string name="reports_title">Reports</string>
+    <string name="reports_subtitle">Category breakdown for the current month (Africa/Cairo).</string>
+    <string name="total_spent">Total spent</string>
+    <string name="across_transactions">Across %1$d transactions</string>
+    <string name="no_debits">No debit transactions this month yet.</string>
+    <string name="pct_of_top">%1$d%% of the highest category</string>
+
+    <!-- Budgets -->
+    <string name="budgets_title">Budgets</string>
+    <string name="budgets_subtitle">Set monthly limits per category · %1$s · progress turns red when exceeded.</string>
+    <string name="monthly_limit">Monthly limit (EGP)</string>
+    <string name="budget_placeholder">e.g. 1500.00</string>
+    <string name="spent_of">Spent %1$s of %2$s</string>
+    <string name="no_limit">Spent %1$s · no limit set</string>
+    <string name="loading_categories">Loading categories…</string>
+    <string name="save_budget">Save budget</string>
+
+    <!-- Category rules -->
+    <string name="rules_title">Category rules</string>
+    <string name="rules_subtitle">When an SMS or notification contains a keyword, the transaction is auto-categorized.</string>
+    <string name="rule_keyword">Keyword (English or Arabic)</string>
+    <string name="rule_keyword_placeholder">e.g. carrefour, مترو, instapay…</string>
+    <string name="assign_category">Assign to category</string>
+    <string name="add_rule">Add rule</string>
+    <string name="tap_to_add">Tap + to add the rule</string>
+    <string name="active_rules">Active rules (%1$d)</string>
+    <string name="no_rules">No rules yet. Add one above, or rely on the seeded Egyptian defaults.</string>
+    <string name="delete_rule">Delete rule</string>
+    <string name="back">Back</string>
+    <string name="settings_title">Settings</string>
+    <string name="open_settings">Settings</string>
+    <string name="settings_language_section">Language</string>
+    <string name="language_system">System Default</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_hint">When System Default is selected, SpendWise follows your device language (Arabic → Arabic, otherwise English).</string>
+    <string name="manage_rules">Category rules</string>
+    <string name="manage_rules_desc">Auto-categorize transactions from bank SMS and notifications</string>
 </resources>

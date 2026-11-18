@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpendWise</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_list">القائمة</string>
+    <string name="nav_add">إضافة</string>
+    <string name="nav_reports">التقارير</string>
+    <string name="nav_budgets">الميزانيات</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_tagline">متتبع مصروفات محليّ أولًا · جنيه مصري</string>
+    <string name="spent_this_month">المصروف هذا الشهر</string>
+    <string name="received_transactions">المستلم: %1$s · %2$d معاملة</string>
+    <string name="auto_captured">يُلتقط تلقائيًا ويُضاف يدويًا — كل شيء في مكان واحد</string>
+    <string name="recent_transactions">المعاملات الأخيرة</string>
+    <string name="empty_title">لا توجد معاملات بعد</string>
+    <string name="empty_body">ستظهر هنا رسائل SMS البنكية وإشعارات InstaPay تلقائيًا بعد منحك إذن استقبال الرسائل والوصول للإشعارات. أو استخدم تبويب «إضافة» لإنشاء معاملة يدويًا.</string>
+
+    <!-- Permission rationale banner -->
+    <string name="banner_title">الالتقاط التلقائي متوقف</string>
+    <string name="banner_body">يقرأ SpendWise رسائل SMS البنكية وإشعارات InstaPay لتسجيل مصروفاتك تلقائيًا. كل شيء يبقى على جهازك — لا يتم رفع أي شيء.</string>
+    <string name="banner_grant_sms">امنح إذن استقبال الرسائل</string>
+    <string name="banner_enable_notif">فعِّل الوصول للإشعارات من الإعدادات</string>
+    <string name="banner_dismiss">تجاهل</string>
+
+    <!-- Transaction list -->
+    <string name="list_title">كل المعاملات</string>
+    <string name="list_subtitle">اضغط على أي معاملة لإعادة تصنيفها أو حذفها.</string>
+    <string name="search">بحث</string>
+    <string name="search_placeholder">التاجر، المرسل، المبلغ…</string>
+    <string name="no_match">لا توجد معاملات تطابق «%1$s».</string>
+    <string name="empty_none">لا توجد معاملات بعد.</string>
+    <string name="uncategorized">غير مصنّفة</string>
+    <string name="choose_category">اختر الفئة الصحيحة:</string>
+    <string name="done">تم</string>
+    <string name="delete">حذف</string>
+    <string name="transaction_title">معاملة</string>
+    <string name="unknown_merchant">تاجر غير معروف</string>
+
+    <!-- Manual entry -->
+    <string name="add_expense">إضافة مصروف</string>
+    <string name="amounts_note">جميع المبالغ بالجنيه المصري (EGP / ج.م)</string>
+    <string name="amount_label">المبلغ (جنيه)</string>
+    <string name="amount_placeholder">مثال: 250.00</string>
+    <string name="merchant_placeholder">مثال: كارفور، أوبر، فاتورة فودافون…</string>
+    <string name="expense">مصروف</string>
+    <string name="income">دخل</string>
+    <string name="error_amount">يرجى إدخال مبلغ صحيح أكبر من صفر.</string>
+    <string name="error_save">تعذر حفظ المعاملة. حاول مرة أخرى.</string>
+    <string name="save_transaction">احفظ المعاملة</string>
+    <string name="saved_toast">تم الحفظ — شهر %1$s</string>
+    <string name="merchant_label">التاجر / الوصف</string>
+    <string name="category_label">الفئة</string>
+
+    <!-- Reports -->
+    <string name="reports_title">التقارير</string>
+    <string name="reports_subtitle">تفصيل الفئات للشهر الحالي (بتوقيت القاهرة).</string>
+    <string name="total_spent">إجمالي المصروف</string>
+    <string name="across_transactions">عبر %1$d معاملة</string>
+    <string name="no_debits">لا توجد معاملات خصم هذا الشهر بعد.</string>
+    <string name="pct_of_top">%1$d%% من أعلى فئة</string>
+
+    <!-- Budgets -->
+    <string name="budgets_title">الميزانيات</string>
+    <string name="budgets_subtitle">حدد حدودًا شهرية لكل فئة · %1$s · يتحول المؤشر للأحمر عند تجاوز الحد.</string>
+    <string name="monthly_limit">الحد الشهري (جنيه)</string>
+    <string name="budget_placeholder">مثال: 1500.00</string>
+    <string name="spent_of">صُرف %1$s من %2$s</string>
+    <string name="no_limit">صُرف %1$s · لم يُحدد حد</string>
+    <string name="loading_categories">جارٍ تحميل الفئات…</string>
+    <string name="save_budget">احفظ الميزانية</string>
+
+    <!-- Category rules -->
+    <string name="rules_title">قواعد التصنيف</string>
+    <string name="rules_subtitle">عندما تحتوي الرسالة أو الإشعار على كلمة مفتاحية، تُصنّف المعاملة تلقائيًا.</string>
+    <string name="rule_keyword">كلمة مفتاحية (عربي أو إنجليزي)</string>
+    <string name="rule_keyword_placeholder">مثال: carrefour، مترو، instapay…</string>
+    <string name="assign_category">عيّنها إلى فئة</string>
+    <string name="add_rule">إضافة القاعدة</string>
+    <string name="tap_to_add">اضغط + لإضافة القاعدة</string>
+    <string name="active_rules">القواعد النشطة (%1$d)</string>
+    <string name="no_rules">لا توجد قواعد بعد. أضف واحدة بالأعلى، أو اعتمد على القواعد المصرية الافتراضية.</string>
+    <string name="delete_rule">حذف القاعدة</string>
+    <string name="back">رجوع</string>
+    <string name="settings_title">الإعدادات</string>
+    <string name="open_settings">الإعدادات</string>
+    <string name="settings_language_section">اللغة</string>
+    <string name="language_system">لغة النظام</string>
+    <string name="language_english">الإنجليزية</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_hint">عند اختيار «لغة النظام» يتبع SpendWise لغة جهازك (العربية ← العربية، وإلا الإنجليزية).</string>
+    <string name="manage_rules">قواعد التصنيف</string>
+    <string name="manage_rules_desc">صنّف المعاملات تلقائيًا من رسائل البنك والإشعارات</string>
+</resources>

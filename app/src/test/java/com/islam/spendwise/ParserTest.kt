@@ -20,7 +20,7 @@ class ParserTest {
     @Test
     fun parsesCibStyleDebitSms() {
         val body = "CIB: Purchase of EGP 1,250.00 at CARREFOUR on 15/11/2026 14:30 was approved. Ref 123456"
-        val result = parser.parse(body, "CIB")
+        val result = parser.parse(body)
         assertTrue(result is ParserResult.Success)
         val tx = (result as ParserResult.Success).transaction
         assertEquals(125000L, tx.amountMinor)
@@ -30,7 +30,7 @@ class ParserTest {
     @Test
     fun parsesArabicIndicDigitsAndArabicCurrency() {
         val body = "خصم ١٢٥٠٫٠٠ ج.م من بطاقتك لدى كارفور"
-        val result = parser.parse(body, "CIB")
+        val result = parser.parse(body)
         assertTrue(result is ParserResult.Success)
         val tx = (result as ParserResult.Success).transaction
         assertEquals(125000L, tx.amountMinor)
@@ -40,7 +40,7 @@ class ParserTest {
     @Test
     fun parsesArabicDateFormat() {
         val body = "Vodafone: Your bill EGP 350.00 was paid successfully on 03/11/2026 09:15"
-        val result = parser.parse(body, "VF-CAIRO")
+        val result = parser.parse(body)
         assertTrue(result is ParserResult.Success)
         val tx = (result as ParserResult.Success).transaction
         assertEquals(35000L, tx.amountMinor)
@@ -48,14 +48,14 @@ class ParserTest {
 
     @Test
     fun rejectsNonTransactionMessage() {
-        val result = parser.parse("Hello! Enjoy your free weekend offer at our new branch.", "CIB")
+        val result = parser.parse("Hello! Enjoy your free weekend offer at our new branch.")
         assertTrue(result is ParserResult.NotATransaction)
     }
 
     @Test
     fun creditBecomesCreditType() {
         val body = "InstaPay: You received EGP 500.00 from Ahmed Ali on 10/11/2026 18:00"
-        val result = parser.parse(body, "InstaPay")
+        val result = parser.parse(body)
         assertTrue(result is ParserResult.Success)
         assertEquals(TransactionType.CREDIT, (result as ParserResult.Success).transaction.type)
     }
@@ -101,7 +101,7 @@ class ParserTest {
     @Test
     fun referenceIsExtractedAndPrioritizedInDedupe() {
         val body = "CIB: Purchase of EGP 1,250.00 at CARREFOUR on 15/11/2026 14:30 was approved. Ref 123456"
-        val result = parser.parse(body, "CIB")
+        val result = parser.parse(body)
         assertTrue(result is ParserResult.Success)
         val tx = (result as ParserResult.Success).transaction
         assertEquals("123456", tx.reference)

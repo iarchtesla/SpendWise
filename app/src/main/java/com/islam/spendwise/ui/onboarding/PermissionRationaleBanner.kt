@@ -31,6 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.islam.spendwise.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -99,7 +101,7 @@ fun PermissionRationaleBanner(modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "Auto-capture is off",
+                    text = stringResource(R.string.banner_title),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onErrorContainer,
@@ -108,14 +110,14 @@ fun PermissionRationaleBanner(modifier: Modifier = Modifier) {
                 IconButton(onClick = { dismissed = true }) {
                     Icon(
                         Icons.Filled.Close,
-                        contentDescription = "Dismiss",
+                        contentDescription = stringResource(R.string.banner_dismiss),
                         tint = MaterialTheme.colorScheme.onErrorContainer
                     )
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "SpendWise reads bank SMS and InstaPay notifications to record expenses automatically. Everything stays on your device — nothing is uploaded.",
+                text = stringResource(R.string.banner_body),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onErrorContainer
             )
@@ -129,7 +131,7 @@ fun PermissionRationaleBanner(modifier: Modifier = Modifier) {
                             )
                         )
                     }
-                ) { Text("Grant SMS permission") }
+                ) { Text(stringResource(R.string.banner_grant_sms)) }
             }
             if (!notificationAccess) {
                 TextButton(
@@ -138,7 +140,7 @@ fun PermissionRationaleBanner(modifier: Modifier = Modifier) {
                             Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
                         )
                     }
-                ) { Text("Enable Notification Access in Settings") }
+                ) { Text(stringResource(R.string.banner_enable_notif)) }
             }
         }
     }

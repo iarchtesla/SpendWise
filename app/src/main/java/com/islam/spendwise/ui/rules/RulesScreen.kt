@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,8 +34,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.islam.spendwise.R
 import com.islam.spendwise.data.local.SpendWiseDatabaseProvider
 import com.islam.spendwise.data.local.entity.CategoryRuleEntity
 import kotlinx.coroutines.launch
@@ -52,25 +56,29 @@ fun RulesScreen(onBack: () -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         item {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
                 Column {
                     Text(
-                        text = "Category rules",
+                        text = stringResource(R.string.rules_title),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "When an SMS or notification contains a keyword, the transaction is auto-categorized.",
+                        text = stringResource(R.string.rules_subtitle),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -82,17 +90,19 @@ fun RulesScreen(onBack: () -> Unit) {
             OutlinedTextField(
                 value = keyword,
                 onValueChange = { keyword = it },
-                label = { Text("Keyword (English or Arabic)") },
-                placeholder = { Text("e.g. carrefour, مترو, instapay…") },
+                label = { Text(stringResource(R.string.rule_keyword)) },
+                placeholder = { Text(stringResource(R.string.rule_keyword_placeholder)) },
                 singleLine = true,
+                shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth()
             )
         }
 
         item {
             Text(
-                text = "Assign to category",
-                style = MaterialTheme.typography.titleSmall
+                text = stringResource(R.string.assign_category),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.size(4.dp))
             Row(
@@ -102,7 +112,7 @@ fun RulesScreen(onBack: () -> Unit) {
                 categories.forEach { category ->
                     FilterChip(
                         selected = selectedCategoryId == category.id,
-                        onClick = { selectedCategoryId = category.id },
+                        onClick = { selectedCategoryId = if (selectedCategoryId == category.id) null else category.id },
                         label = { Text("${category.icon.orEmpty()} ${category.nameEn}") }
                     )
                 }
@@ -112,8 +122,15 @@ fun RulesScreen(onBack: () -> Unit) {
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Text(
+                    text = stringResource(R.string.tap_to_add),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
                 IconButton(
                     onClick = {
                         val kw = keyword.trim()
@@ -135,51 +152,52 @@ fun RulesScreen(onBack: () -> Unit) {
                     },
                     modifier = Modifier.size(56.dp)
                 ) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add rule")
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add_rule))
                 }
             }
-            Text(
-                text = "Tap + to add the rule",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(end = 8.dp)
-            )
         }
 
         item {
             Text(
-                text = "Active rules (${rules.size})",
+                text = stringResource(R.string.active_rules, rules.size),
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.Bold
             )
         }
 
         if (rules.isEmpty()) {
             item {
                 Text(
-                    text = "No rules yet. Add one above, or rely on the seeded Egyptian defaults.",
+                    text = stringResource(R.string.no_rules),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
         } else {
-            items(rules) { rule ->
-                Card(modifier = Modifier.fillMaxWidth()) {
+            items(rules, key = { it.id }) { rule ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    )
+                ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 8.dp),
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = "“${rule.keyword}”",
                                 style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1
                             )
                             Text(
-                                text = "→ ${categoryById[rule.categoryId]?.nameEn ?: "Unknown"} · priority ${rule.priority}",
+                                text = "${categoryById[rule.categoryId]?.nameEn ?: "—"} · #${rule.priority}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -187,7 +205,11 @@ fun RulesScreen(onBack: () -> Unit) {
                         IconButton(
                             onClick = { scope.launch { db.categoryRuleDao().delete(rule) } }
                         ) {
-                            Icon(Icons.Filled.Delete, contentDescription = "Delete rule")
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = stringResource(R.string.delete_rule),
+                                tint = MaterialTheme.colorScheme.error
+                            )
                         }
                     }
                 }

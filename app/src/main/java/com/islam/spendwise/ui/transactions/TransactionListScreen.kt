@@ -18,7 +18,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,11 +25,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import com.islam.spendwise.R
 import com.islam.spendwise.data.local.SpendWiseDatabaseProvider
 import com.islam.spendwise.ui.common.TransactionRow
 import com.islam.spendwise.ui.common.formatDay
@@ -64,24 +66,25 @@ fun TransactionListScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text(
-            text = "All transactions",
+            text = stringResource(R.string.list_title),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Tap any item to re-categorize or delete it.",
+            text = stringResource(R.string.list_subtitle),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         OutlinedTextField(
             value = query,
             onValueChange = { query = it },
-            label = { Text("Search") },
-            placeholder = { Text("Merchant, sender, amount…") },
+            label = { Text(stringResource(R.string.search)) },
+            placeholder = { Text(stringResource(R.string.search_placeholder)) },
             singleLine = true,
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp),
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,17 +98,22 @@ fun TransactionListScreen() {
             if (filtered.isEmpty()) {
                 item {
                     Text(
-                        text = if (query.isBlank()) "No transactions yet." else "No transactions match \"$query\".",
+                        text = if (query.isBlank()) {
+                            stringResource(R.string.empty_none)
+                        } else {
+                            stringResource(R.string.no_match, query)
+                        },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(24.dp)
                     )
                 }
             }
-            items(filtered) { tx ->
+            items(filtered, key = { it.id }) { tx ->
                 TransactionRow(
                     merchant = tx.merchant.orEmpty(),
-                    categoryLabel = tx.categoryId?.let { categoryById[it]?.nameEn } ?: "Uncategorized",
+                    categoryLabel = tx.categoryId?.let { categoryById[it]?.nameEn }
+                        ?: stringResource(R.string.uncategorized),
                     amountMinor = tx.amountMinor,
                     isDebit = tx.type == "DEBIT",
                     dateText = formatDay(tx.occurredAt),
@@ -118,7 +126,8 @@ fun TransactionListScreen() {
     if (editing != null) {
         AlertDialog(
             onDismissRequest = { editingId = null },
-            title = { Text(editing.merchant.orEmpty().ifBlank { "Transaction" }) },
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
+            title = { Text(editing.merchant.orEmpty().ifBlank { stringResource(R.string.transaction_title) }) },
             text = {
                 Column {
                     Text(
@@ -126,15 +135,15 @@ fun TransactionListScreen() {
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "Choose the correct category:",
+                        text = stringResource(R.string.choose_category),
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
                     )
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        items(categories) { category ->
+                        items(categories, key = { it.id }) { category ->
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 RadioButton(
                                     selected = editing.categoryId == category.id,
@@ -157,9 +166,7 @@ fun TransactionListScreen() {
                 }
             },
             confirmButton = {
-                Button(
-                    onClick = { editingId = null }
-                ) { Text("Done") }
+                Button(onClick = { editingId = null }) { Text(stringResource(R.string.done)) }
             },
             dismissButton = {
                 OutlinedButton(
@@ -170,7 +177,7 @@ fun TransactionListScreen() {
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     )
-                ) { Text("Delete") }
+                ) { Text(stringResource(R.string.delete)) }
             }
         )
     }

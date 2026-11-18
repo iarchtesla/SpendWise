@@ -29,7 +29,7 @@ object TransactionIngestor {
         onComplete: (() -> Unit)? = null
     ) {
         val result = try {
-            parser.parse(body, sender)
+            parser.parse(body)
         } catch (_: Exception) {
             onComplete?.invoke()
             return

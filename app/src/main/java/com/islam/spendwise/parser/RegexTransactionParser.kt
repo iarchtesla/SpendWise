@@ -14,7 +14,7 @@ class RegexTransactionParser {
     private val debitHints = listOf("purchase", "debit", "withdraw", "payment", "paid", "خصم", "دفع", "سحب", "مشتريات", "سداد", "شراء")
     private val creditHints = listOf("credit", "refund", "deposit", "received", "إيداع", "مرتجع", "دائن", "استلام")
 
-    fun parse(input: String, sender: String?): ParserResult {
+    fun parse(input: String): ParserResult {
         val normalized = CurrencyUtils.normalizeDigits(input)
         val lower = normalized.lowercase(Locale.ROOT)
 

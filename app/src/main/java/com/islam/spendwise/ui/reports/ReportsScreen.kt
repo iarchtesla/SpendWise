@@ -11,17 +11,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.islam.spendwise.R
 import com.islam.spendwise.data.local.SpendWiseDatabaseProvider
 import com.islam.spendwise.ui.common.currentMonthRange
 import com.islam.spendwise.ui.common.formatEgp
@@ -44,7 +49,8 @@ fun ReportsScreen() {
         .map { (categoryId, txs) ->
             CategoryTotal(
                 categoryId = categoryId,
-                name = categoryId?.let { categoryById[it]?.nameEn } ?: "Uncategorized",
+                name = categoryId?.let { categoryById[it]?.nameEn }
+                    ?: stringResource(R.string.uncategorized),
                 icon = categoryId?.let { categoryById[it]?.icon } ?: "📦",
                 total = txs.sumOf { it.amountMinor }
             )
@@ -56,39 +62,47 @@ fun ReportsScreen() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
             Text(
-                text = "Reports",
+                text = stringResource(R.string.reports_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Category breakdown for the current month (Africa/Cairo).",
+                text = stringResource(R.string.reports_subtitle),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "Total spent",
+                        text = stringResource(R.string.total_spent),
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                     )
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = formatEgp(total),
                         style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                     Text(
-                        text = "Across ${monthDebits.size} transactions",
+                        text = stringResource(R.string.across_transactions, monthDebits.size),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f)
                     )
                 }
             }
@@ -97,17 +111,24 @@ fun ReportsScreen() {
         if (breakdown.isEmpty()) {
             item {
                 Text(
-                    text = "No debit transactions this month yet.",
+                    text = stringResource(R.string.no_debits),
                     style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(24.dp)
                 )
             }
         } else {
-            items(breakdown) { entry ->
+            items(breakdown, key = { it.categoryId ?: -1L }) { entry ->
                 val fraction = entry.total.toFloat() / max.toFloat()
                 val barColor = categoryColor(entry.categoryId)
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp)) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
                         Row {
                             Text(
                                 text = "${entry.icon} ${entry.name}",
@@ -118,10 +139,10 @@ fun ReportsScreen() {
                             Text(
                                 text = formatEgp(entry.total),
                                 style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.Bold
                             )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         LinearProgressIndicator(
                             progress = { fraction },
                             modifier = Modifier
@@ -131,9 +152,9 @@ fun ReportsScreen() {
                             color = barColor,
                             trackColor = MaterialTheme.colorScheme.surfaceVariant
                         )
-                        Spacer(modifier = Modifier.height(2.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "${((fraction) * 100).toInt()}% of the highest category",
+                            text = stringResource(R.string.pct_of_top, (fraction * 100).toInt()),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -151,10 +172,12 @@ private data class CategoryTotal(
     val total: Long
 )
 
-private fun categoryColor(categoryId: Long?): Color {
+private fun categoryColor(categoryId: Long?): androidx.compose.ui.graphics.Color {
     val palette = listOf(
-        Color(0xFF00696E), Color(0xFF4E6A6B), Color(0xFF7D5260), Color(0xFFB3261E),
-        Color(0xFF386A20), Color(0xFF745B00), Color(0xFF4A6572), Color(0xFF6D4C41)
+        androidx.compose.ui.graphics.Color(0xFF00696E), androidx.compose.ui.graphics.Color(0xFF4E6A6B),
+        androidx.compose.ui.graphics.Color(0xFF745B00), androidx.compose.ui.graphics.Color(0xFFB3261E),
+        androidx.compose.ui.graphics.Color(0xFF386A20), androidx.compose.ui.graphics.Color(0xFF4A6572),
+        androidx.compose.ui.graphics.Color(0xFF6D4C41), androidx.compose.ui.graphics.Color(0xFF7D5260)
     )
     val index = categoryId?.let { (it % palette.size).toInt() } ?: 0
     return palette[index]
